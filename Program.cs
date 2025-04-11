@@ -1,4 +1,12 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using WebAppBlazorSample.Areas.Identity.Data;
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("WebAppBlazorSampleIdentityDbContextConnection") ?? throw new InvalidOperationException("Connection string 'WebAppBlazorSampleIdentityDbContextConnection' not found."); ;
+
+builder.Services.AddDbContext<WebAppBlazorSampleIdentityDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<WebAppBlazorSampleIdentityDbContext>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
